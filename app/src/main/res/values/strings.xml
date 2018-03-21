@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">KungFuChess</string>
+    <string name="menu_title">Definitely not Onitama</string>
+    <string name="start_game">Start Game</string>
+</resources>
