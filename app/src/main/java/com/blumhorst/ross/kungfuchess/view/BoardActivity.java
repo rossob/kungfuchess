@@ -1,10 +1,8 @@
 package com.blumhorst.ross.kungfuchess.view;
 
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 
 import com.blumhorst.ross.kungfuchess.R;
 import com.blumhorst.ross.kungfuchess.presenter.BoardPresenter;
@@ -24,7 +22,7 @@ public class BoardActivity extends AppCompatActivity implements BoardView, GridV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board_view);
 
-        gridView = (GridView)findViewById(R.id.game_board);
+        gridView = findViewById(R.id.game_board);
         gridView.setViewListener(this);
 
         boardPresenter = new BoardPresenterImpl(this);
@@ -32,8 +30,16 @@ public class BoardActivity extends AppCompatActivity implements BoardView, GridV
 
     @Override
     public void onGridClick(int x, int y){
+        Log.d("onGridClick", "X: " + x + ",Y: " + y);
         int[] clickedSpot = {x, y};
-        int[][] moves = {{x-1, y-1}, {x-1, y+1},{x+1, y+1},{x+1, y-1}};
-        gridView.drawPossibleMoves(clickedSpot, moves);
+        if(boardPresenter.pawnIsSelected() && boardPresenter.isPossibleMove(clickedSpot)) {
+            Log.d("jkhgfg", "jhgfd");
+            boardPresenter.moveSelectedPawn(clickedSpot);
+            gridView.drawPossibleMoves(clickedSpot, boardPresenter.getMoves());
+        } else {
+            boardPresenter.setClickedSpot(clickedSpot);
+            boardPresenter.setMoves();
+            gridView.drawPossibleMoves(clickedSpot, boardPresenter.getMoves());
+        }
     }
 }

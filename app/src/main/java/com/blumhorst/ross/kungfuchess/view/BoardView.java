@@ -6,6 +6,4 @@ package com.blumhorst.ross.kungfuchess.view;
 
 public interface BoardView {
 
-
-
 }

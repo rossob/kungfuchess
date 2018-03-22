@@ -8,6 +8,8 @@
 
     <com.blumhorst.ross.kungfuchess.view.GridView
         android:id="@+id/game_board"
-        android:layout_width="321dp"
-        android:layout_height="331dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
 </android.support.constraint.ConstraintLayout>

@@ -6,4 +6,23 @@ package com.blumhorst.ross.kungfuchess.presenter;
 
 public interface BoardPresenter {
 
+    void setClickedSpot(int[] clickedSpot);
+
+    void setMoves();
+
+    boolean pawnIsSelected();
+
+    boolean isPossibleMove(int[] clickedSpot);
+
+    void moveSelectedPawn(int[] spotToMoveTo);
+
+    int[][] getMoves();
+
+    int[][] getRedStudents();
+
+    int[] getRedMaster();
+
+    int[][] getBlueStudents();
+
+    int[] getBlueMaster();
 }

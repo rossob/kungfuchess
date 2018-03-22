@@ -4,9 +4,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.blumhorst.ross.kungfuchess.R;
 
 /**
  * Created by rossblumhorst on 3/20/18.
@@ -22,7 +26,7 @@ public class GridView extends View {
 
     private Paint paint = new Paint();
     private Paint currentSpot = new Paint();
-    private Paint possibleMoves= new Paint();
+    private Paint possibleMoves = new Paint();
 
     public GridView(Context context) {
         this(context, null);
@@ -37,7 +41,7 @@ public class GridView extends View {
         possibleMoves.setARGB(63, 63, 63, 63);
     }
 
-    public void setViewListener(GridViewInterface gridViewInterface){
+    public void setViewListener(GridViewInterface gridViewInterface) {
         this.gridViewInterface = gridViewInterface;
     }
 
@@ -47,22 +51,34 @@ public class GridView extends View {
         calculateDimensions();
     }
 
+    @Override
+    protected void onMeasure(int widthSpec, int heightSpec) {
+        super.onMeasure(widthSpec, heightSpec);
+        setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
+    }
+
     private void calculateDimensions() {
-        cellWidth = getWidth() / 5;
-        cellHeight = getHeight() / 5;
+        cellWidth = cellHeight = getWidth() / 5;
 
         invalidate();
     }
 
     @Override
-    protected void onDraw(Canvas canvas){
+    protected void onDraw(Canvas canvas) {
+
+        Log.d("onDraw", "clickedSpot: " + clickedSpot + ", possibleMoves: " + possibleMoves);
         canvas.drawColor(Color.WHITE);
 
-        int width = getWidth();
-        int height = getHeight();
+        Drawable redMasterDrawable = getResources().getDrawable(R.drawable.master_red);
+        Drawable redStudentDrawable = getResources().getDrawable(R.drawable.student_red);
+        Drawable blueMasterDrawable = getResources().getDrawable(R.drawable.master_blue);
+        Drawable blueStudentDrawable = getResources().getDrawable(R.drawable.student_blue);
 
-        for(int i = 0; i < 5; i++) {
-            for(int j = 0; j < 5; j++) {
+        int width = getWidth();
+        int height = getWidth();
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 canvas.drawRect(
                         i * cellWidth,
                         j * cellHeight,
@@ -70,7 +86,7 @@ public class GridView extends View {
                         (j + 1) * cellHeight,
                         paint
                 );
-                if(clickedSpot != null && clickedSpot[0] == i && clickedSpot[1] == j) {
+                if (clickedSpot != null && clickedSpot[0] == i && clickedSpot[1] == j) {
                     canvas.drawRect(
                             i * cellWidth,
                             j * cellHeight,
@@ -79,7 +95,7 @@ public class GridView extends View {
                             currentSpot
                     );
                 }
-                if(moves != null) {
+                if (moves != null) {
                     for (int x = 0; x < moves.length; x++) {
                         if (moves[x][0] == i && moves[x][1] == j) {
                             canvas.drawRect(
@@ -95,7 +111,7 @@ public class GridView extends View {
             }
         }
 
-        for(int i = 1; i < 5; i++) {
+        for (int i = 1; i < 5; i++) {
             canvas.drawLine(
                     i * cellWidth,
                     0,
@@ -104,7 +120,7 @@ public class GridView extends View {
                     paint);
         }
 
-        for(int i = 1; i < 5; i++) {
+        for (int i = 1; i < 5; i++) {
             canvas.drawLine(
                     0,
                     i * cellHeight,
@@ -112,20 +128,56 @@ public class GridView extends View {
                     i * cellHeight,
                     paint);
         }
+
+        redMasterDrawable.setBounds(
+                (redMaster[0] * cellWidth) + (cellWidth / 2) - 48,
+                (redMaster[1] * cellHeight) + (cellHeight / 2) - 48,
+                (redMaster[0] * cellWidth) + (cellWidth / 2) + 48,
+                (redMaster[1] * cellHeight) + (cellHeight / 2) + 48
+        );
+        redMasterDrawable.draw(canvas);
+
+        for (int[] student : redStudents) {
+            redStudentDrawable.setBounds(
+                    (student[0] * cellWidth) + (cellWidth / 2) - 24,
+                    (student[1] * cellHeight) + (cellHeight / 2) - 24,
+                    (student[0] * cellWidth) + (cellWidth / 2) + 24,
+                    (student[1] * cellHeight) + (cellHeight / 2) + 24
+            );
+            redStudentDrawable.draw(canvas);
+        }
+
+        blueMasterDrawable.setBounds(
+                (blueMaster[0] * cellWidth) + (cellWidth / 2) - 48,
+                (blueMaster[1] * cellHeight) + (cellHeight / 2) - 48,
+                (blueMaster[0] * cellWidth) + (cellWidth / 2) + 48,
+                (blueMaster[1] * cellHeight) + (cellHeight / 2) + 48
+        );
+        blueMasterDrawable.draw(canvas);
+
+        for (int[] student : blueStudents) {
+            blueStudentDrawable.setBounds(
+                    (student[0] * cellWidth) + (cellWidth / 2) - 24,
+                    (student[1] * cellHeight) + (cellHeight / 2) - 24,
+                    (student[0] * cellWidth) + (cellWidth / 2) + 24,
+                    (student[1] * cellHeight) + (cellHeight / 2) + 24
+            );
+            blueStudentDrawable.draw(canvas);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_UP) {
-            int column = (int)(event.getX() / cellWidth);
-            int row = (int)(event.getY() / cellHeight);
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            int column = (int) (event.getX() / cellWidth);
+            int row = (int) (event.getY() / cellHeight);
             gridViewInterface.onGridClick(column, row);
         }
         return true;
     }
 
-    public void drawPossibleMoves(int[] clickedSpot, int[][] moves){
-        if(this.clickedSpot != null && this.clickedSpot != clickedSpot) {
+    public void drawPossibleMoves(int[] clickedSpot, int[][] moves) {
+        if (clickedSpot != null && moves != null) {
             this.clickedSpot = clickedSpot;
             this.moves = moves;
             invalidate();
