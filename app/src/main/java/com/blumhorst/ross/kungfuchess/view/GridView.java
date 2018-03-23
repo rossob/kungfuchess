@@ -28,6 +28,11 @@ public class GridView extends View {
     private Paint currentSpot = new Paint();
     private Paint possibleMoves = new Paint();
 
+    private int[] redMaster;
+    private int[][]redStudents;
+    private int[] blueMaster;
+    private int[][] blueStudents;
+
     public GridView(Context context) {
         this(context, null);
     }
@@ -174,6 +179,14 @@ public class GridView extends View {
             gridViewInterface.onGridClick(column, row);
         }
         return true;
+    }
+
+    public void setPawnPositions(int[] redMaster, int[][] redStudents, int[] blueMaster, int[][] blueStudents) {
+        this.redMaster = redMaster;
+        this.redStudents = redStudents;
+        this.blueMaster = blueMaster;
+        this.blueStudents = blueStudents;
+        invalidate();
     }
 
     public void drawPossibleMoves(int[] clickedSpot, int[][] moves) {

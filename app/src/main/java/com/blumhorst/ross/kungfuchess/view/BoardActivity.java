@@ -26,6 +26,7 @@ public class BoardActivity extends AppCompatActivity implements BoardView, GridV
         gridView.setViewListener(this);
 
         boardPresenter = new BoardPresenterImpl(this);
+        setPawnPositions();
     }
 
     @Override
@@ -35,11 +36,21 @@ public class BoardActivity extends AppCompatActivity implements BoardView, GridV
         if(boardPresenter.pawnIsSelected() && boardPresenter.isPossibleMove(clickedSpot)) {
             Log.d("jkhgfg", "jhgfd");
             boardPresenter.moveSelectedPawn(clickedSpot);
+            setPawnPositions();
             gridView.drawPossibleMoves(clickedSpot, boardPresenter.getMoves());
         } else {
             boardPresenter.setClickedSpot(clickedSpot);
             boardPresenter.setMoves();
             gridView.drawPossibleMoves(clickedSpot, boardPresenter.getMoves());
         }
+    }
+
+    private void setPawnPositions() {
+        gridView.setPawnPositions(
+                boardPresenter.getRedMaster(),
+                boardPresenter.getRedStudents(),
+                boardPresenter.getBlueMaster(),
+                boardPresenter.getBlueStudents()
+        );
     }
 }
