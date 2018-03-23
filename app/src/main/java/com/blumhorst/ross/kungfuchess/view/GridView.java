@@ -91,14 +91,16 @@ public class GridView extends View {
                         (j + 1) * cellHeight,
                         paint
                 );
-                if (clickedSpot != null && clickedSpot[0] == i && clickedSpot[1] == j) {
-                    canvas.drawRect(
-                            i * cellWidth,
-                            j * cellHeight,
-                            (i + 1) * cellWidth,
-                            (j + 1) * cellHeight,
-                            currentSpot
-                    );
+                if (clickedSpot != null && clickedSpot.length > 0) {
+                    if (clickedSpot[0] == i && clickedSpot[1] == j) {
+                        canvas.drawRect(
+                                i * cellWidth,
+                                j * cellHeight,
+                                (i + 1) * cellWidth,
+                                (j + 1) * cellHeight,
+                                currentSpot
+                        );
+                    }
                 }
                 if (moves != null) {
                     for (int x = 0; x < moves.length; x++) {
@@ -193,7 +195,7 @@ public class GridView extends View {
         if (clickedSpot != null && moves != null) {
             this.clickedSpot = clickedSpot;
             this.moves = moves;
-            invalidate();
         }
+        invalidate();
     }
 }

@@ -31,6 +31,7 @@ public class BoardPresenterImpl implements BoardPresenter {
         int y = clickedSpot[1];
         Log.d("setClickedSpot", x + " " + y);
         moves = new int[4][2];
+
         moves[0][0] = x - 1;
         moves[0][1] = y - 1;
         moves[1][0] = x - 1;
@@ -39,6 +40,7 @@ public class BoardPresenterImpl implements BoardPresenter {
         moves[2][1] = y + 1;
         moves[3][0] = x + 1;
         moves[3][1] = y - 1;
+
     }
 
     public boolean pawnIsSelected() {
@@ -59,10 +61,61 @@ public class BoardPresenterImpl implements BoardPresenter {
     }
 
     public boolean isPossibleMove(int[] clickedSpot) {
+
+        for(int[] student: redStudents) {
+            if(redMaster[0] == this.clickedSpot[0] && redMaster[1] == this.clickedSpot[1]) {
+                if(student[0] == clickedSpot[0] && student[1] == clickedSpot[1]) {
+                    this.clickedSpot = null;
+                    moves = null;
+                    return false;
+                }
+            }
+            if (student[0] == this.clickedSpot[0] && student[1] == this.clickedSpot[1]) {
+                if(clickedSpot[0] == redMaster[0] && clickedSpot[1] == redMaster[1]) {
+                    this.clickedSpot = null;
+                    moves = null;
+                    return false;
+                }
+                for(int[] otherStudents: redStudents) {
+                    if(clickedSpot[0] == otherStudents[0] && clickedSpot[1] == otherStudents[1]) {
+                        this.clickedSpot = null;
+                        moves = null;
+                        return false;
+                    }
+                }
+            }
+        }
+
+        for(int[] student: blueStudents) {
+            if(blueMaster[0] == this.clickedSpot[0] && blueMaster[1] == this.clickedSpot[1]) {
+                if(student[0] == clickedSpot[0] && student[1] == clickedSpot[1]) {
+                    this.clickedSpot = null;
+                    moves = null;
+                    return false;
+                }
+            }
+            if (student[0] == this.clickedSpot[0] && student[1] == this.clickedSpot[1]) {
+                if(clickedSpot[0] == blueMaster[0] && clickedSpot[1] == blueMaster[1]) {
+                    this.clickedSpot = null;
+                    moves = null;
+                    return false;
+                }
+                for(int[] otherStudents: blueStudents) {
+                    if(clickedSpot[0] == otherStudents[0] && clickedSpot[1] == otherStudents[1]) {
+                        this.clickedSpot = null;
+                        moves = null;
+                        return false;
+                    }
+                }
+            }
+        }
+
         for(int[] move: moves) {
             if(move[0] == clickedSpot[0] && move[1] == clickedSpot[1])
                 return true;
         }
+        this.clickedSpot = null;
+        moves = null;
         return false;
     }
 

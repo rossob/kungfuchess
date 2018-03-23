@@ -33,11 +33,15 @@ public class BoardActivity extends AppCompatActivity implements BoardView, GridV
     public void onGridClick(int x, int y){
         Log.d("onGridClick", "X: " + x + ",Y: " + y);
         int[] clickedSpot = {x, y};
-        if(boardPresenter.pawnIsSelected() && boardPresenter.isPossibleMove(clickedSpot)) {
-            Log.d("jkhgfg", "jhgfd");
-            boardPresenter.moveSelectedPawn(clickedSpot);
-            setPawnPositions();
-            gridView.drawPossibleMoves(clickedSpot, boardPresenter.getMoves());
+        if(boardPresenter.pawnIsSelected()) {
+            if(boardPresenter.isPossibleMove(clickedSpot)) {
+                Log.d("jkhgfg", "jhgfd");
+                boardPresenter.moveSelectedPawn(clickedSpot);
+                setPawnPositions();
+                gridView.drawPossibleMoves(clickedSpot, boardPresenter.getMoves());
+            } else {
+                gridView.drawPossibleMoves(new int[0], new int[0][0]);
+            }
         } else {
             boardPresenter.setClickedSpot(clickedSpot);
             boardPresenter.setMoves();
