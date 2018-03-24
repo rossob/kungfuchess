@@ -129,7 +129,7 @@ public class BoardPresenterImpl implements BoardPresenter {
             blueMaster[1] = spotToMoveTo[1];
             return;
         }
-        for(int[] student: blueStudents) {
+        for(int[] student: redStudents) {
             if(student[0] == clickedSpot[0] && student[1] == clickedSpot[1]) {
                 student[0] = spotToMoveTo[0];
                 student[1] = spotToMoveTo[1];
